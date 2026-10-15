@@ -1,0 +1,68 @@
+define bot refuse to respond
+  "I can't help with that request. It was blocked by a guardrail."
+
+define bot refuse off topic
+  "I can only help with Aperture — dashboards, metrics, alerts, billing and the API."
+
+define user ask capabilities
+  "what can you do"
+  "who are you"
+  "what are you"
+  "help me"
+  "what is this"
+
+define bot explain capabilities
+  "I'm Railz, Aperture's support assistant. Ask me about dashboards, metrics, alerts, billing, integrations or the API."
+
+define user express greeting
+  "hi"
+  "hello"
+  "hey"
+  "good morning"
+
+define bot express greeting
+  "Hello. I'm Railz. How can I help with Aperture today?"
+
+define flow
+  user ask capabilities
+  bot explain capabilities
+
+define flow
+  user express greeting
+  bot express greeting
+
+define flow check jailbreak
+  $result = execute railz_check_jailbreak(text=$user_message)
+
+  if $result.blocked
+    bot refuse to respond
+    stop
+
+define flow check sensitive data
+  $result = execute railz_check_sensitive_data(text=$user_message)
+
+  if $result.blocked
+    bot refuse to respond
+    stop
+
+define flow check on topic
+  $result = execute railz_check_topic(text=$user_message)
+  $off_topic = not $result.allowed
+
+  if $off_topic
+    bot refuse off topic
+    stop
+
+define flow self check output
+  $result = execute railz_self_check_output(bot_message=$bot_message)
+
+  if $result.blocked
+    bot refuse to respond
+    stop
+
+define flow check toxicity
+  $result = execute railz_check_toxicity(text=$bot_message)
+
+  if $result.blocked
+    bot refuse to respond
+    stop

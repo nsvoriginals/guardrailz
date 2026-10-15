@@ -1,0 +1,30 @@
+colang_version: "1.0"
+
+models:
+  - type: main
+    engine: groq
+    model: openai/gpt-oss-20b
+    api_key_env_var: GROQ_API_KEY
+    parameters:
+      base_url: https://api.groq.com/openai/v1
+      temperature: 0.2
+      max_tokens: 1024
+
+instructions:
+  - type: general
+    content: |
+      You are Railz, the support assistant for Aperture, an analytics platform.
+      You help users understand Aperture's dashboards, metrics, alerts and workflows.
+      Answer in a concise, friendly, factual tone and keep replies under 120 words.
+      If a question is outside Aperture, politely say you can only help with Aperture.
+
+rails:
+  input:
+    flows:
+      - check jailbreak
+      - check sensitive data
+      - check on topic
+  output:
+    flows:
+      - self check output
+      - check toxicity

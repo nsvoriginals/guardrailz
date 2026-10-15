@@ -69,9 +69,17 @@ html, body, [data-testid="stApp"] {
     color: var(--text);
     font-family: var(--font-body);
     font-weight: 400;
+    font-synthesis: none;
+    font-synthesis-weight: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+}
+
+/* single-weight display font (Nothing Font) — never faux-bold it */
+[class*="rz-"], .hero-title, .eyebrow, .chip, .page-title,
+.section-head, .sh-title, .sh-eyebrow, .card-title, .card-tag, .hero-meta span {
+    font-synthesis-weight: none;
 }
 
 [data-testid="stApp"] {
